@@ -1,0 +1,88 @@
+.stainless-bg-fixed {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    overflow: hidden;
+}
+
+.stainless-bg-fixed::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(123, 117, 117, 0.65);
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+}
+
+
+.stainless-section {
+    position: relative;
+    overflow: hidden;
+    background-image: url('/assets/images/texture8.jpg');
+    background-size: cover;
+    background-position: center;
+
+}
+
+.stainless-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(123, 117, 117, 0.65);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.20;
+    pointer-events: none;
+}
+
+.fade-section {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1.3s ease forwards;
+}
+
+@keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(40px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+
+.stainless-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(12px);
+    transition: all .45s ease;
+    border-radius: 18px;
+}
+
+.stainless-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: rgba(255,255,255,0.32);
+    background: rgba(255,255,255,0.12);
+}
+
+.stainless-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.45),
+        transparent
+    );
+    transform: skewX(-20deg);
+    opacity: 0;
+    transition: .8s;
+}
+
+.stainless-card:hover::before {
+    left: 150%;
+    opacity: 1;
+}

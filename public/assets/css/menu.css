@@ -1,0 +1,88 @@
+.stainless-bg-fixed {
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.category-link {
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+.category-link:hover {
+    background: rgba(194, 166, 6, 0.539);
+    color: linear-gradient(135deg, #b28b39, #e0c67c, #b28b39);
+    transform: translateX(4px);
+}
+
+.category-active {
+    background: linear-gradient(135deg, #b28b39, #e0c67c, #b28b39) !important;
+    color: rgb(255, 255, 255) !important;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(255,215,0,0.4);
+    transform: translateX(4px);
+}
+
+.src-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #b28b39, #e0c67c, #b28b39);
+    color: #1a1a1a;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.src-btn:hover {
+    background: linear-gradient(135deg, #e0c67c, #f5e7b1, #e0c67c);
+    box-shadow: 0 0 12px rgba(224,198,124,0.8);
+    transform: translateY(-2px);
+}
+
+.src-btn:active {
+    transform: scale(0.97);
+}
+
+
+.shine-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.shine-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255,255,255,0.35) 50%,
+        transparent 100%
+    );
+    transform: translateX(-120%);
+    transition: 0.8s ease-in-out;
+}
+
+.shine-card:hover .shine-effect {
+    transform: translateX(120%);
+}
+
+.shine-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+.opacity-0.animate-fade-up {
+    animation: fadeUp 0.7s forwards ease-out;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

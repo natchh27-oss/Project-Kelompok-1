@@ -1,0 +1,171 @@
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #dcdcdc, #f0f0f0, #d9d9d9);
+            color: #222;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            background-image: url('../images/texture9.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 999;
+            transition: all 0.4s ease-in-out;
+        }
+
+        nav::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            z-index: 0;
+        }
+
+
+        nav::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                120deg,
+                rgba(255,255,255,0.2) 0%,
+                rgba(255,255,255,0.5) 25%,
+                rgba(255,255,255,0.1) 50%,
+                rgba(255,255,255,0.3) 75%,
+                rgba(255,255,255,0.15) 100%
+            );
+            animation: shine 12s linear infinite;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(10deg); }
+            100% { transform: translateX(100%) rotate(10deg); }
+        }
+
+        nav.scrolled {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            transform: translateY(0);
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        nav.hidden-up {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-80%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        nav.shrink {
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.4rem !important;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0%;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-login, .btn-register {
+            padding: 0.45rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid #fff;
+            color: white;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-login:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .btn-register {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .btn-register:hover {
+            background-color: #ffeecb;
+            color: #000;
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+
+        footer {
+            background: rgba(240, 240, 240, 0.2);
+            backdrop-filter: blur(8px);
+            color: #333;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            padding: 2rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .desktop-menu {
+                display: none;
+            }
+            .mobile-menu {
+                display: block;
+            }
+        }
