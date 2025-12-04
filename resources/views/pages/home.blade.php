@@ -42,7 +42,7 @@
 </section>
 
 <div class="stainless-section min-h-screen w-full pt-40 pb-32 relative">
-    
+
     <div class="absolute inset-0 stainless-overlay backdrop-blur-md"></div>
 
     <section id="about" class="fade-section relative w-full py-32 text-white z-10">
@@ -181,11 +181,6 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     </div>
 
-                    <div class="absolute inset-0 bg-[url('/assets/images/stain.png')] bg-cover bg-center opacity-20 pointer-events-none"></div>
-
-                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                        <span class="text-sm md:text-base tracking-widest uppercase text-white">View</span>
-                    </div>
                 </div>
                 @endforeach
             </div>

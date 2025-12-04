@@ -81,12 +81,11 @@
                     <textarea name="notes" rows="3" class="input-stainless"></textarea>
                 </div>
 
-                <div class="md:col-span-2">
-                    <button type="submit"
-                        class="btn-reservasi w-full py-3 font-semibold text-white rounded-xl overflow-hidden relative">
-                        Pesan Reservasi Sekarang
-                    </button>
-                </div>
+                <button type="button" id="sendWA"
+                    class="btn-reservasi w-full py-3 font-semibold text-white rounded-xl overflow-hidden relative">
+                    Pesan Reservasi Sekarang
+                </button>
+
             </form>
         </div>
 
@@ -113,5 +112,38 @@
 
     </div>
 </section>
+
+<script>
+document.getElementById("sendWA").addEventListener("click", function () {
+    const telp = "6281234567890";
+
+    const name = document.querySelector("input[name='name']").value;
+    const phone = document.querySelector("input[name='phone']").value;
+    const date = document.querySelector("input[name='date']").value;
+    const time = document.querySelector("input[name='time']").value;
+    const people = document.querySelector("input[name='people']").value;
+    const table_location = document.querySelector("input[name='table_location']:checked")?.value;
+    const notes = document.querySelector("textarea[name='notes']").value;
+
+    if (!name || !phone || !date || !time || !people || !table_location) {
+        alert("Harap lengkapi semua data terlebih dahulu.");
+        return;
+    }
+
+    const message =
+        `Halo, saya ingin melakukan reservasi di Ploutos Coffee.%0A%0A` +
+        `Nama: ${name}%0A` +
+        `Nomor Telepon: ${phone}%0A` +
+        `Tanggal: ${date}%0A` +
+        `Jam: ${time}%0A` +
+        `Jumlah Orang: ${people}%0A` +
+        `Lokasi Meja: ${table_location}%0A` +
+        `Catatan: ${notes ? notes : "-"}%0A%0A` +
+        `Terima kasih.`;
+
+    const url = `https://wa.me/${telp}?text=${message}`;
+    window.open(url, "_blank");
+});
+</script>
 
 @endsection

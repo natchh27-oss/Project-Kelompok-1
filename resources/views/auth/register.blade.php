@@ -13,7 +13,6 @@
         class="relative z-10 w-[92%] max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2
         rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 glass-card">
 
-        {{-- LEFT: REGISTER FORM --}}
         <div id="registerForm"
              class="p-10 md:p-14 fade-up flex flex-col justify-center transition-all duration-700">
 
@@ -26,7 +25,6 @@
             <form method="POST" action="/register" class="space-y-6">
                 @csrf
 
-                {{-- USERNAME --}}
                 <div>
                     <label class="text-black text-sm mb-1 block">Username</label>
                     <div class="relative">
@@ -40,7 +38,6 @@
                     </div>
                 </div>
 
-                {{-- EMAIL --}}
                 <div>
                     <label class="text-black text-sm mb-1 block">Email</label>
                     <div class="relative">
@@ -106,7 +103,6 @@
 
         </div>
 
-        {{-- RIGHT IMAGE --}}
         <div id="imageWrapper"
             class="relative h-[300px] md:h-full fade-slide transition-all duration-700">
             <img src="/assets/images/banner.jpg"

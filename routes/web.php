@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\AdminEventController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
@@ -25,10 +24,11 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showDirectForm'])
+    ->name('password.request');
+
+Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePasswordDirect'])
+    ->name('password.direct.update');
 
 //route profile
 Route::middleware('auth')->group(function () {
@@ -57,7 +57,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(func
 
         return view('admin.messages', compact('comments', 'contacts'));
     })->name('messages');
-    Route::delete('/contact/{id}', [\App\Http\Controllers\Admin\ContactController::class, 'destroy'])
+    Route::delete('/contact/{id}', [\App\Http\Controllers\ContactController::class, 'destroy'])
          ->name('contact.destroy');
 
     Route::resource('/menus', AdminMenuController::class)->names([
@@ -75,7 +75,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(func
     Route::put('/profile', [AdminSettingController::class, 'updateProfile'])->name('profile.update');
     Route::get('/password', [AdminSettingController::class, 'password'])->name('settings.password');
     Route::put('/password', [AdminSettingController::class, 'updatePassword'])->name('password.update');
-    Route::resource('/gallery', App\Http\Controllers\AdminGalleryController::class);
 
 });
 
