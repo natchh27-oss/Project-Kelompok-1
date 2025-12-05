@@ -188,59 +188,173 @@
     </section>
 
     <section id="testimonial" class="fade-section relative w-full py-32 text-white z-10">
-        <div class="relative w-full max-w-7xl mx-auto text-center px-6">
-            <h2 class="text-4xl md:text-5xl font-['The_Seasons'] mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]">What Our Customers Say</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                @forelse($comments as $comment)
-                    <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-xl animate-fade-up">
+    <div class="relative w-full max-w-7xl mx-auto text-center px-6">
 
-                        <div class="flex items-center gap-4 mb-4">
+        <h2 class="text-4xl md:text-5xl font-['The_Seasons'] mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]">
+            What Our Customers Say
+        </h2>
 
-                            @if($comment->user->profile_photo)
-                                <img src="{{ asset('storage/' . $comment->user->profile_photo) }}"
-                                    class="w-12 h-12 rounded-full object-cover border border-white/30 shadow">
-                            @else
-                                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center
-                                            text-xl font-bold border border-white/30 text-white shadow">
-                                    {{ strtoupper($comment->user->name[0]) }}
-                                </div>
-                            @endif
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
 
-                            <div class="text-left">
-                                <h3 class="font-semibold text-white text-lg">
-                                    {{ $comment->user->name }}
-                                </h3>
-                                <span class="text-gray-300 text-xs">
-                                    {{ $comment->created_at->diffForHumans() }}
-                                </span>
-                            </div>
+            @forelse($comments as $comment)
 
-                        </div>
+                {{-- Tampilkan hanya komentar utama --}}
+                @if($comment->parent_id === null)
 
-                        <p class="text-gray-100 text-sm leading-relaxed">
-                            {{ $comment->comment }}
-                        </p>
+                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 shadow-xl animate-fade-up text-left">
 
-                        @if($comment->media)
-                            <div class="mt-3">
-                                @if(Str::endsWith($comment->media, ['jpg','jpeg','png','webp']))
-                                    <img src="{{ asset('storage/' . $comment->media) }}"
-                                        class="rounded-xl w-full border border-white/20 shadow">
-                                @else
-                                    <video controls class="rounded-xl w-full border border-white/20 shadow">
-                                        <source src="{{ asset('storage/' . $comment->media) }}">
-                                    </video>
-                                @endif
+                    {{-- USER INFO --}}
+                    <div class="flex items-center gap-4 mb-4">
+                        @if($comment->user->profile_photo)
+                            <img src="{{ asset('storage/' . $comment->user->profile_photo) }}"
+                                class="w-12 h-12 rounded-full object-cover border border-white/30 shadow">
+                        @else
+                            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center
+                                        text-xl font-bold border border-white/30 text-white shadow">
+                                {{ strtoupper($comment->user->name[0]) }}
                             </div>
                         @endif
 
+                        <div>
+                            <h3 class="font-semibold text-white text-lg">{{ $comment->user->name }}</h3>
+                            <span class="text-gray-300 text-xs">{{ $comment->created_at->diffForHumans() }}</span>
+                        </div>
                     </div>
-                @empty
-                    <p class="text-gray-300">Belum ada komentar.</p>
-                @endforelse
 
-            </div>
+                    {{-- COMMENT TEXT --}}
+                    <p class="text-gray-100 text-sm leading-relaxed">{{ $comment->comment }}</p>
+
+                    {{-- MEDIA --}}
+                    @if($comment->media)
+                        <div class="mt-3">
+                            @if(Str::endsWith($comment->media, ['jpg','jpeg','png','webp']))
+                                <img src="{{ asset('storage/' . $comment->media) }}"
+                                    class="rounded-xl w-full border border-white/20 shadow">
+                            @else
+                                <video controls class="rounded-xl w-full border border-white/20 shadow">
+                                    <source src="{{ asset('storage/' . $comment->media) }}">
+                                </video>
+                            @endif
+                        </div>
+                    @endif
+
+                    {{-- ACTION BUTTONS --}}
+                    <div class="mt-4 flex justify-between items-center">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-xl transition reply-btn"
+                                data-id="{{ $comment->id }}">
+                            Balas
+                        </button>
+
+                        <button class="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-2 px-4 rounded-xl transition"
+                                onclick="likeComment({{ $comment->id }})">
+                            Like <span id="like-count-{{ $comment->id }}">{{ $comment->likes_count ?? 0 }}</span>
+                        </button>
+                    </div>
+
+
+                    {{-- ============================
+                         INLINE REPLY FORM
+                    =============================== --}}
+                    <form action="{{ route('comments.store') }}" method="POST" enctype="multipart/form-data"
+                        class="reply-form hidden mt-4 bg-white/10 border border-white/20 p-4 rounded-xl backdrop-blur-lg">
+
+                        @csrf
+                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                        <input type="hidden" name="menu_id" value="{{ $menu->id ?? null }}">
+
+                        <textarea name="comment" rows="2"
+                            class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-sm"
+                            placeholder="Tulis balasan..."></textarea>
+
+                        <input type="file" name="media" accept="image/*,video/*"
+                               class="text-white text-xs mt-2">
+
+                        <button type="submit"
+                            class="mt-3 px-4 py-2 rounded-lg bg-blue-500/80 hover:bg-blue-600 text-white text-sm">
+                            Kirim Balasan
+                        </button>
+                    </form>
+
+
+                    {{-- ============================
+                         LIST BALASAN
+                    =============================== --}}
+                    @if($comment->replies && $comment->replies->count())
+                        <div class="mt-6 ml-4 border-l border-white/20 pl-4 space-y-4">
+
+                            @foreach($comment->replies as $reply)
+                                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow">
+
+                                    {{-- Reply User --}}
+                                    <div class="flex items-center gap-3 mb-2">
+                                        @if($reply->user->profile_photo)
+                                            <img src="{{ asset('storage/' . $reply->user->profile_photo) }}"
+                                                class="w-10 h-10 rounded-full object-cover border border-white/30 shadow">
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center
+                                                        text-lg font-bold border border-white/30 text-white shadow">
+                                                {{ strtoupper($reply->user->name[0]) }}
+                                            </div>
+                                        @endif
+
+                                        <div>
+                                            <h4 class="font-semibold text-white text-sm">{{ $reply->user->name }}</h4>
+                                            <span class="text-gray-300 text-xs">{{ $reply->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Reply Content --}}
+                                    <p class="text-gray-100 text-sm">{{ $reply->comment }}</p>
+
+                                    {{-- Reply Media --}}
+                                    @if($reply->media)
+                                        @if(Str::endsWith($reply->media, ['jpg','jpeg','png','webp']))
+                                            <img src="{{ asset('storage/' . $reply->media) }}"
+                                                 class="rounded-xl w-40 mt-2 border border-white/20 shadow">
+                                        @else
+                                            <video controls class="rounded-xl w-40 mt-2 border border-white/20 shadow">
+                                                <source src="{{ asset('storage/' . $reply->media) }}">
+                                            </video>
+                                        @endif
+                                    @endif
+
+                                    <div class="mt-2 text-right">
+                                        <button class="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold py-1 px-3 rounded-xl transition"
+                                                onclick="likeComment({{ $reply->id }})">
+                                            Like <span id="like-count-{{ $reply->id }}">{{ $reply->likes_count ?? 0 }}</span>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            @endforeach
+
+                        </div>
+                    @endif
+
+                </div>
+
+                @endif
+
+            @empty
+                <p class="text-gray-300 col-span-3">Belum ada komentar.</p>
+            @endforelse
+
         </div>
-    </section>
+
+    </div>
+</section>
+
 </div>
+
+<script>
+function openReplyForm(commentId) {
+    document.getElementById("reply-parent-id").value = commentId;
+    document.getElementById("reply-form-container").classList.remove("hidden");
+}
+
+function closeReplyForm() {
+    document.getElementById("reply-form-container").classList.add("hidden");
+}
+</script>
+
 @endsection

@@ -26,7 +26,9 @@
                 <div class="mt-6 border-t border-white/20 pt-4 flex flex-col gap-4">
                     <form id="favorite-form" action="{{ route('menu.favorite', $menu->id) }}" method="POST" class="self-start">
                         @csrf
-                        <button type="submit" class="flex items-center gap-2 px-6 py-3 rounded-xl {{ auth()->user() && auth()->user()->favoriteMenus->contains($menu->id) ? 'bg-yellow-500' : 'bg-gray-500/60' }} hover:bg-yellow-600 text-white font-semibold transition shadow-lg">
+                        <button type="submit" class="flex items-center gap-2 px-6 py-3 rounded-xl
+                            {{ auth()->check() && auth()->user()->favoriteMenus->contains($menu->id) ? 'bg-yellow-500' : 'bg-gray-500/60' }}
+                            hover:bg-yellow-600 text-white font-semibold transition shadow-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
                             </svg>
@@ -110,15 +112,20 @@
             </div>
         </div>
 
-      
     </div>
 
-    <div id="favorite-bubble" class="fixed bottom-5 right-5 bg-yellow-500 text-white px-4 py-2 rounded-full shadow-lg z-50 opacity-100 transition-all duration-500"></div>
+    <div id="favorite-bubble" class="fixed bottom-5 right-5 bg-yellow-500 text-white px-4 py-2 rounded-full shadow-lg z-50 opacity-0 transition-all duration-500"></div>
 </section>
 
 <script>
 document.getElementById('favorite-form').addEventListener('submit', function(e){
     e.preventDefault();
+
+    @if(!auth()->check())
+        alert("Silakan login terlebih dahulu untuk menambahkan favorit!");
+        return;
+    @endif
+
     const form = this;
     const url = form.action;
     const token = form.querySelector('input[name="_token"]').value;
@@ -133,18 +140,21 @@ document.getElementById('favorite-form').addEventListener('submit', function(e){
     .then(response => response.json())
     .then(data => {
         const button = form.querySelector('button');
+        const bubble = document.getElementById('favorite-bubble');
+
         if(data.status === 'added'){
             button.classList.remove('bg-gray-500/60');
             button.classList.add('bg-yellow-500');
+            bubble.textContent = 'Menu telah ditambahkan ke favorit!';
         } else {
             button.classList.remove('bg-yellow-500');
             button.classList.add('bg-gray-500/60');
+            bubble.textContent = 'Menu telah dihapus dari favorit!';
         }
 
-        const bubble = document.getElementById('favorite-bubble');
-        bubble.textContent = data.status === 'added' ? 'Menu telah ditambahkan ke favorit!' : 'Menu telah dihapus dari favorit!';
         bubble.classList.remove('opacity-0');
         bubble.classList.add('opacity-100');
+
         setTimeout(() => {
             bubble.classList.remove('opacity-100');
             bubble.classList.add('opacity-0');

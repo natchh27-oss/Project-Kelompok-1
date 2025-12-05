@@ -100,4 +100,3 @@ Route::post('/reservasi', [ReservationController::class, 'store'])->name('reserv
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
-Route::post('/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');

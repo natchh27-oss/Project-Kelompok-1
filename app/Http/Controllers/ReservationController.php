@@ -9,27 +9,36 @@ class ReservationController extends Controller
 {
     public function create()
     {
-        return view('pages.reservasi'); 
+        return view('pages.reservasi');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'date' => 'required|date|after_or_equal:today',
-            'time' => 'required',
-            'people' => 'required|integer|min:1',
-            'table_location' => 'required|in:Indoor,Outdoor',
-            'notes' => 'nullable|string',
-        ]);
+        'name' => 'required|string|max:255',
+        'phone' => 'required|string|max:20',
+        'date' => 'required|date|after_or_equal:today',
+        'time' => 'required',
+        'people' => 'required|integer|min:1',
+        'table_location' => 'required|in:Indoor,Outdoor',
+        'notes' => 'nullable|string',
+    ]);
 
-        $reservation = Reservation::create($data);
+    $reservation = Reservation::create($data);
 
-        // Optional: kirim email ke admin
-        // \Mail::to('admin@ploutos.com')->send(new ReservationReceived($reservation));
+    $telp = '62895355323974';
 
-        return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Admin akan menghubungi Anda.');
+    $message = "Halo, saya ingin melakukan reservasi di Ploutos Coffee.%0A%0A" .
+        "Nama: {$data['name']}%0A" .
+        "Nomor Telepon: {$data['phone']}%0A" .
+        "Tanggal: {$data['date']}%0A" .
+        "Jam: {$data['time']}%0A" .
+        "Jumlah Orang: {$data['people']}%0A" .
+        "Lokasi Meja: {$data['table_location']}%0A" .
+        "Catatan: " . ($data['notes'] ?? "-") . "%0A%0A" .
+        "Terima kasih.";
+
+    return redirect()->away("https://wa.me/{$telp}?text={$message}");
+
     }
-
 }

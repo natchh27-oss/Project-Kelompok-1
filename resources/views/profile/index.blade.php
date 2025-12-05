@@ -125,22 +125,24 @@
                                 </form>
                             </div>
 
-                            <form action="{{ route('comments.reply', $comment->id) }}"
-                                  method="POST" enctype="multipart/form-data"
-                                  class="reply-form mt-3 hidden">
+                            <form action="{{ route('comments.store') }}" method="POST" enctype="multipart/form-data"
+                                class="reply-form mt-3 hidden">
                                 @csrf
-                                <textarea name="reply" rows="2"
+                                <input type="hidden" name="menu_id" value="{{ $menu->id ?? 1 }}"> <!-- pastikan menu_id valid -->
+                                <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+
+                                <textarea name="comment" rows="2"
                                     class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white text-sm"
                                     placeholder="Tulis balasan..."></textarea>
 
-                                <input type="file" name="media"
-                                       accept="image/*,video/*"
-                                       class="text-white text-xs mt-2">
+                                <input type="file" name="media" accept="image/*,video/*" class="text-white text-xs mt-2">
 
-                                <button class="mt-2 px-4 py-1 rounded-lg bg-blue-500/80 hover:bg-blue-600 text-white text-xs">
+                                <button type="submit"
+                                    class="mt-2 px-4 py-1 rounded-lg bg-blue-500/80 hover:bg-blue-600 text-white text-xs">
                                     Kirim Balasan
                                 </button>
                             </form>
+
 
                             <div class="mt-4 space-y-3 ml-10 border-l border-white/20 pl-4">
                                 @foreach($comment->replies as $reply)
