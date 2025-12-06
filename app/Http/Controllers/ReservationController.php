@@ -26,7 +26,7 @@ class ReservationController extends Controller
 
     $reservation = Reservation::create($data);
 
-    $telp = '62895355323974';
+    $telp = '62838136456';
 
     $message = "Halo, saya ingin melakukan reservasi di Ploutos Coffee.%0A%0A" .
         "Nama: {$data['name']}%0A" .
