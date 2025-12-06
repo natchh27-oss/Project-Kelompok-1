@@ -100,3 +100,6 @@ Route::post('/reservasi', [ReservationController::class, 'store'])->name('reserv
 
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('/comments/{id}/like', [CommentController::class, 'like'])
+    ->middleware('auth')
+    ->name('comments.like');

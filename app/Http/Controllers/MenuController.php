@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Category;
+use App\Models\Comment;
+
 
 class MenuController extends Controller
 {
@@ -32,9 +34,16 @@ class MenuController extends Controller
     {
         $decodedName = urldecode($name);
 
-        $menu = Menu::with(['comments.user'])->where('name', $decodedName)->firstOrFail();
+        $menu = Menu::where('name', $decodedName)->firstOrFail();
 
-        return view('pages.menu-show', compact('menu'));
+        $comments = Comment::withCount('likes')
+        ->with(['user', 'replies.user'])
+        ->where('menu_id', $menu->id)
+        ->whereNull('parent_id')
+        ->latest()
+        ->get();
+
+        return view('pages.menu-show', compact('menu', 'comments '));
     }
 
 }

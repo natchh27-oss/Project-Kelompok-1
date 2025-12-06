@@ -27,4 +27,10 @@ class Comment extends Model
     {
         return $this->belongsTo(Menu::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(CommentLike::class);
+    }
+
 }

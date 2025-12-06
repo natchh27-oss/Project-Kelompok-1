@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use App\Models\CommentLike;
+use Illuminate\Support\Facades\Storage;
 
 class CommentController extends Controller
 {
@@ -43,5 +45,29 @@ class CommentController extends Controller
 
         $comment->delete();
         return back()->with('success', 'Komentar berhasil dihapus.');
+    }
+
+    public function like($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $existing = CommentLike::where('comment_id', $id)
+                               ->where('user_id', auth()->id())
+                               ->first();
+
+        if ($existing) {
+            // Jika sudah like → unlike
+            $existing->delete();
+        } else {
+            // Jika belum like → like
+            CommentLike::create([
+                'comment_id' => $id,
+                'user_id' => auth()->id()
+            ]);
+        }
+
+        return response()->json([
+            'likes' => CommentLike::where('comment_id', $id)->count()
+        ]);
     }
 }
