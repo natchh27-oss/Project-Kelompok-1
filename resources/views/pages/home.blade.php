@@ -27,14 +27,12 @@
 
         <div class="flex justify-center gap-4 flex-wrap">
             <a href="/menu"
-                class="px-8 py-3 rounded-full text-black bg-gradient-to-r from-white/80 to-white/60
-                       backdrop-blur shadow hover:shadow-xl transition">
+                class="btn-register">
                 Explore Menu
             </a>
 
             <a href="/reservasi"
-                class="px-8 py-3 rounded-full text-white border border-white/50
-                       hover:bg-white hover:text-black transition">
+                class="btn-login">
                 Book a Table
             </a>
         </div>
@@ -122,20 +120,25 @@
 
     <section id="event" class="fade-section relative w-full py-32 text-white z-10">
         <div class="relative w-full max-w-7xl mx-auto text-center px-6">
-            <h2 class="text-4xl md:text-5xl font-['The_Seasons'] mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]">Event & Promo</h2>
+
+            <h2 class="text-4xl md:text-5xl font-['The_Seasons'] mb-6 drop-shadow-[0_4px_8px_rgba(0,0,0,0.7)]">
+                Event & Promo
+            </h2>
+
             <p class="text-lg text-gray-100 max-w-3xl mx-auto mb-16 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
                 Nikmati event dan promo eksklusif kami setiap bulannya.
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div x-data="{ openLoyalty: false }" class="grid grid-cols-1 md:grid-cols-4 gap-10">
+
                 @foreach ($events as $event)
                 <div class="stainless-card p-0 group relative overflow-hidden">
                     <img src="{{ $event->image ? asset('storage/'.$event->image) : '/assets/manual/default-event.jpg' }}"
-                         class="w-full h-48 object-cover group-hover:scale-110 transition duration-700 filter blur-[0.5px]">
+                        class="w-full h-48 object-cover group-hover:scale-110 transition duration-700 filter blur-[0.5px]">
 
                     <div class="absolute bottom-0 left-0 w-full h-16 overflow-hidden">
                         <img src="{{ $event->image ? asset('storage/'.$event->image) : '/assets/manual/default-event.jpg' }}"
-                             class="w-full object-cover transform scale-y-[-1] opacity-20 blur-sm">
+                            class="w-full object-cover transform scale-y-[-1] opacity-20 blur-sm">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                     </div>
 
@@ -149,14 +152,61 @@
                 @endforeach
 
                 <div class="stainless-card p-6 flex flex-col justify-between">
-                    <img src="/assets/manual/loyalty.jpg" class="w-full h-40 object-cover rounded-lg mb-4">
+                    <img src="/assets/images/loyalty.png" class="w-full h-40 object-cover rounded-lg mb-4">
+
                     <h3 class="text-2xl font-semibold mb-3 text-left">Loyalty Card Member</h3>
-                    <p class="text-sm text-left opacity-90 mb-4">Kumpulkan stamp dan dapatkan reward khusus.</p>
-                    <a href="/loyalty" class="mt-auto py-2 px-4 bg-white/80 text-black rounded-full hover:bg-white transition"> Learn More </a>
+
+                    <p class="text-sm text-left opacity-90 mb-4">
+                        Kumpulkan stamp dan dapatkan reward khusus.
+                    </p>
+
+                    <button
+                        @click="openLoyalty = true"
+                        class="mt-auto py-2 px-4 bg-white/80 text-black rounded-full hover:bg-white transition">
+                        Learn More
+                    </button>
                 </div>
+
+                <div
+                    x-show="openLoyalty"
+                    x-transition.opacity
+                    class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[999] p-4"
+                    style="display: none;"
+                >
+                    <div class="bg-white text-black rounded-2xl max-w-lg w-full p-6 relative shadow-xl">
+
+                        <button @click="openLoyalty = false"
+                            class="absolute top-3 right-3 text-gray-600 hover:text-black text-2xl">
+                            &times;
+                        </button>
+
+                        <img src="/assets/images/loyalty.png"
+                            class="w-full h-48 object-cover rounded-xl mb-4">
+
+                        <h3 class="text-2xl font-bold mb-3">
+                            Loyalty Card Member
+                        </h3>
+
+                        <p class="text-gray-700 leading-relaxed">
+                            Dengan menjadi member Loyalty Card, kamu bisa mengumpulkan stamp
+                            setiap 55.000 pembelian . Tukarkan stamp kamu untuk mendapatkan
+                            reward eksklusif seperti <strong>free baverage</strong> atau
+                            <strong>mix platter</strong>
+                        </p>
+
+                        <ul class="mt-4 list-disc pl-6 text-gray-700">
+                            <li>1 stamp tiap pembelian minimun 55.000</li>
+                            <li>10 stamp = Gratis 1 minuman apa pun</li>
+                            <li>Akses promo member setiap bulan</li>
+                        </ul>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
+
 
     <section id="gallery" class="fade-section relative w-full py-32 text-white z-10">
         <div class="relative max-w-7xl mx-auto px-6 md:px-10 text-center">
@@ -337,7 +387,6 @@
 
 <script>
 
-// ========== TOGGLE BALASAN ==========
 function toggleReplies(id) {
     const box = document.getElementById("replies-" + id);
     const btn = document.getElementById("btn-replies-" + id);
@@ -350,7 +399,6 @@ function toggleReplies(id) {
 }
 
 
-// ========== LIKE KOMENTAR ==========
 function likeComment(id) {
     fetch(`/comments/${id}/like`, {
         method: "POST",
@@ -377,25 +425,20 @@ function likeComment(id) {
 
 
 
-// ========== TOMBOL BALAS ==========
 document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll('.reply-btn').forEach(button => {
 
         button.addEventListener('click', function () {
 
-            // Ambil card komentar (kotak besar)
             const card = this.closest('.bg-white\\/10');
 
-            // Cari form reply DI DALAM card itu
             const form = card.querySelector('.reply-form');
 
             if (!form) return;
 
-            // Tampilkan / sembunyikan form
             form.classList.toggle('hidden');
 
-            // Focus textarea saat form muncul
             if (!form.classList.contains('hidden')) {
                 form.querySelector("textarea").focus();
             }

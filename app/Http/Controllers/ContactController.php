@@ -31,4 +31,13 @@ class ContactController extends Controller
 
         return redirect()->away($url);
     }
+
+    public function destroy($id)
+    {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        return redirect()->route('admin.messages')
+            ->with('success', 'Pesan berhasil dihapus.');
+    }
 }

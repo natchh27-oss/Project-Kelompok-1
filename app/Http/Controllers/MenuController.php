@@ -43,7 +43,7 @@ class MenuController extends Controller
         ->latest()
         ->get();
 
-        return view('pages.menu-show', compact('menu', 'comments '));
+        return view('pages.menu-show', compact('menu', 'comments'));
     }
 
 }

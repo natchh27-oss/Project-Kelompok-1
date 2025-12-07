@@ -9,11 +9,15 @@
 
 <body class="min-h-screen flex items-center justify-center bg-stainless relative">
     <a href="/"
-        class="absolute top-6 left-6 px-4 py-2 rounded-xl bg-white/40 backdrop-blur-md
-                border border-white/50 text-black text-sm font-medium hover:bg-[#e0c89d]
-                hover:text-black transition shadow-md">
-            ← Kembali ke Home
-        </a>
+        class="absolute top-6 left-6 flex items-center gap-2 px-4 py-2
+            rounded-xl bg-white/30 backdrop-blur-xl border border-white/40
+            text-black text-sm font-medium shadow-md transition-all
+            hover:bg-white/50 hover:shadow-lg hover:scale-[1.02]">
+
+        <x-heroicon-o-arrow-left class="w-4 h-4" />
+        Kembali ke Home
+    </a>
+
     <div id="authCard"
         class="relative z-10 w-[92%] max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2
         rounded-2xl overflow-hidden shadow-2xl transition-all duration-700 glass-card">

@@ -38,6 +38,7 @@
                         <td class="px-4 py-3">{{ \Carbon\Carbon::parse($res->time)->format('H:i') }}</td>
                         <td class="px-4 py-3">{{ $res->people }}</td>
                         <td class="px-4 py-3">{{ $res->table_location }}</td>
+
                         <td class="px-4 py-3">
                             <span class="px-2 py-1 rounded-full text-sm font-semibold
                                 @if($res->status=='Pending') bg-yellow-500
@@ -47,23 +48,47 @@
                                 {{ $res->status }}
                             </span>
                         </td>
+
                         <td class="px-4 py-3">
-                            <form action="{{ route('admin.reservations.status', $res) }}" method="POST" class="flex gap-2 items-center">
-                                @csrf
-                                <select name="status" class="bg-white text-black rounded-md px-2 py-1 text-sm">
-                                    <option value="Pending" @if($res->status=='Pending') selected @endif>Pending</option>
-                                    <option value="Confirmed" @if($res->status=='Confirmed') selected @endif>Confirmed</option>
-                                    <option value="Cancelled" @if($res->status=='Cancelled') selected @endif>Cancelled</option>
-                                </select>
-                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm transition">
-                                    Update
-                                </button>
-                            </form>
+
+                            <div class="flex gap-3 items-center">
+
+                                {{-- Update Status --}}
+                                <form action="{{ route('admin.reservations.status', $res) }}" method="POST" class="flex gap-2">
+                                    @csrf
+                                    <select name="status" class="bg-white text-black rounded-md px-2 py-1 text-sm">
+                                        <option value="Pending" @if($res->status=='Pending') selected @endif>Pending</option>
+                                        <option value="Confirmed" @if($res->status=='Confirmed') selected @endif>Confirmed</option>
+                                        <option value="Cancelled" @if($res->status=='Cancelled') selected @endif>Cancelled</option>
+                                    </select>
+
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm">
+                                        Update
+                                    </button>
+                                </form>
+
+                                {{-- Tombol HAPUS --}}
+                                <form action="{{ route('admin.reservations.destroy', $res->id) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Yakin ingin menghapus reservasi ini?');">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm shadow">
+                                        Hapus
+                                    </button>
+                                </form>
+
+                            </div>
+
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="text-center py-6 text-gray-300">Belum ada reservasi</td>
+                        <td colspan="8" class="text-center py-6 text-gray-300">
+                            Belum ada reservasi
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

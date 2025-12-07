@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 
 class AdminReservationController extends Controller
 {
-      public function index()
+    public function index()
     {
         $reservations = Reservation::orderBy('date', 'asc')->orderBy('time', 'asc')->get();
         return view('admin.reservations.index', compact('reservations'));
@@ -25,4 +25,12 @@ class AdminReservationController extends Controller
 
         return redirect()->back()->with('success', 'Status reservasi berhasil diupdate.');
     }
+
+    public function destroy(Reservation $reservation)
+    {
+        $reservation->delete();
+
+        return redirect()->back()->with('success', 'Reservasi berhasil dihapus.');
+    }
+
 }

@@ -70,6 +70,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','admin'])->group(func
     ]);
     Route::get('/reservations', [AdminReservationController::class, 'index'])->name('reservations.index');
     Route::post('/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('reservations.status');
+    Route::delete('/reservations/{reservation}',
+    [AdminReservationController::class, 'destroy'])
+    ->name('reservations.destroy');
     Route::resource('/events', AdminEventController::class);
     Route::get('/profile', [AdminSettingController::class, 'profile'])->name('settings.profile');
     Route::put('/profile', [AdminSettingController::class, 'updateProfile'])->name('profile.update');
